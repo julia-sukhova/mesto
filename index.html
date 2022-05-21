@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./pages/index.css">
+    <title>Место</title>
+</head>
+
+<body class="body">
+    <div class="root">
+        <header class="header">
+            <img src="./images/header-logo.svg" class="header__logo" alt="Логотип">
+        </header>
+
+        <main class="content">
+
+            <section class="profile">
+                <img src="./images/Jack-Iv.jpg" class="profile__avatar" alt="Аватар профиля">
+                <div class="profile__info">
+                    <div class="profile__info-item">
+                        <h1 class="profile__name">Жак-Ив Кусто</h1>
+                        <button class="profile__edit-button" type="button"></button>
+                    </div>
+                    <p class="profile__subtitle">Исследователь океана</p>
+                </div>
+                <button class="profile__add-button" type="button"></button>
+            </section>
+
+            <section class="elements">
+                <div class="element">
+                    <img src="./images/Karachaevsk.jpg" class="element__image" alt="Карачаевск">
+                    <div class="element__container">
+                        <h2 class="element__title">Карачаевск</h2>
+                        <button class="element__button" type="button"></button>
+                    </div>
+                </div>
+                <div class="element">
+                    <img src="./images/Elbrus.jpg" class="element__image" alt="Гора Эльбрус">
+                    <div class="element__container">
+                        <h2 class="element__title">Гора Эльбрус</h2>
+                        <button class="element__button" type="button"></button>
+                    </div>
+                </div>
+                <div class="element">
+                    <img src="./images/Dombai.jpg" class="element__image" alt="Домбай">
+                    <div class="element__container">
+                        <h2 class="element__title">Домбай</h2>
+                        <button class="element__button" type="button"></button>
+                    </div>
+                </div>
+                <div class="element">
+                    <img src="./images/Karachaevsk.jpg" class="element__image" alt="Карачаевск">
+                    <div class="element__container">
+                        <h2 class="element__title">Карачаевск</h2>
+                        <button class="element__button" type="button"></button>
+                    </div>
+                </div>
+                <div class="element">
+                    <img src="./images/Elbrus.jpg" class="element__image" alt="Эльбрус">
+                    <div class="element__container">
+                        <h2 class="element__title">Эльбрус</h2>
+                        <button class="element__button" type="button"></button>
+                    </div>
+                </div>
+                <div class="element">
+                    <img src="./images/Dombai.jpg" class="element__image" alt="Домбай">
+                    <div class="element__container">
+                        <h2 class="element__title">Домбай</h2>
+                        <button class="element__button" type="button"></button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p class="footer__text">&copy;2022 Mesto Russia</p>
+        </footer>
+
+        <div class="popup popup_opened">
+            <div class="popup__container">
+                <button class="popup__close-icon" type="button"></button>
+                <form class="form" name="form" action="#" method="post">
+                    <h2 class="form__title">Редактировать профиль</h2>
+                    <fieldset class="form__user-data">
+                        <input class="form__item form__item-name" type="text" placeholder="Жак-Ив-Кусто" required>
+                        <input class="form__item form__item-subtitle" type="text" placeholder="Исследователь океана"
+                            required>
+                    </fieldset>
+                    <button class="form__submit-button" type="button" value="save">Сохранить</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="./script.js"></script>
+</body>
+
+</html>
