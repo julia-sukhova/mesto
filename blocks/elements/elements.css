@@ -8,7 +8,7 @@
     row-gap: 20px;
 }
 
-@media screen and (max-width: 870px) {
+@media screen and (max-width: 900px) {
     .elements {
         grid-template-rows: repeat(3, minmax(min-content, max-content));
         grid-template-columns: repeat(2, minmax(min-content, max-content));
