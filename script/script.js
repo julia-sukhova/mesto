@@ -1,9 +1,9 @@
 let popupElemnt = document.querySelector('.popup');
-let popupCloseIcon = document.querySelector('.popup__close-icon');
+let popupCloseButton = document.querySelector('.popup__close-button');
 
 let formElement = document.querySelector('.form');
-let formNameInput = document.querySelector('.form__item-name');
-let formJobInput = document.querySelector('.form__item-subtitle');
+let formNameInput = document.querySelector('.form__item_text_name');
+let formJobInput = document.querySelector('.form__item_text_subtitle');
 let formSubmitButton = document.querySelector('.form__submit-button');
 
 let profileNameElement = document.querySelector('.profile__name');
@@ -32,8 +32,10 @@ formElement.onsubmit = (ev) => {
     showPopup(false);
 };
 
-popupCloseIcon.onclick = () => {
+popupCloseButton.onclick = () => {
     formNameInput.value = '';
     formJobInput.value = '';
     showPopup(false);
 }
+
+//Спасибо за ревью :3

@@ -8,8 +8,7 @@
     min-height: 23px;
     padding: 0;
     margin: 0;
-    margin-bottom: 54px;
-    text-align: flex-start;
+    margin-bottom: 50px;
 }
 
 @media screen and (max-width:320px) {

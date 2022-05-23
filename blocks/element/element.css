@@ -1,4 +1,5 @@
 .element {
     width: 282px;
-    height: 361;
+    display: flex;
+    flex-direction: column;
 }
