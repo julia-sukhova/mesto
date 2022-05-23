@@ -16,7 +16,3 @@
 .form__item:last-child {
     margin-bottom: 0;
 }
-
-.form__item:focus {
-    color: darkblue;
-}
