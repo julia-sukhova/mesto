@@ -1,3 +1,5 @@
 .element__button_active {
-    background: #000000;
+    background-image: url(../../../../images/Union.svg);
+    width: 22px;
+    height: 19px;
 }
