@@ -7,6 +7,7 @@
     border: none;
     background-color: transparent;
     transition: 1s ease-in-out;
+    flex-shrink: 0;
 }
 
 .element__button:hover {
