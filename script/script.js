@@ -5,7 +5,7 @@ const popupPhotoCardElement = document.querySelector('.popup-photo-card');
 const popupPhotoCardCloseButton = popupPhotoCardElement.querySelector('.popup__close-button');
 const popupPhotoCardShowButton = document.querySelector('.profile__add-button');
 
-const popupViewPhotoElement = document.querySelector('.popup__view-photo');
+const popupViewPhotoElement = document.querySelector('.popup-view-photo');
 const popupViewPhotoCloseButton = popupViewPhotoElement.querySelector('.popup__close-button');
 const popupViewImage = popupViewPhotoElement.querySelector('.popup__image');
 const popupViewCaption = popupViewPhotoElement.querySelector('.popup__caption');
