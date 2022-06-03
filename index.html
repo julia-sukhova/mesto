@@ -35,7 +35,7 @@
             <p class="footer__text">&copy;2022 Mesto Russia</p>
         </footer>
 
-        <div class="popup popup-user">
+        <div class="popup popup_type_user">
             <div class="popup__container">
                 <button class="popup__close-button" type="button" aria-label="Закрыть"></button>
                 <h2 class="popup__title">Редактировать профиль</h2>
@@ -51,7 +51,7 @@
             </div>
         </div>
 
-        <div class="popup popup-photo-card">
+        <div class="popup popup_type_photo-card">
             <div class="popup__container">
                 <button class="popup__close-button" type="button" aria-label="Закрыть"></button>
                 <h2 class="popup__title popup__title_item">Новое место</h2>
@@ -59,7 +59,7 @@
                     <fieldset class="form__item-data">
                         <input class="form__item form__item_text_name" type="text" placeholder="Название"
                             name="form__name" required>
-                        <input class="form__item form__item_text_link" type="text" placeholder="Ссылка на картинку"
+                        <input class="form__item form__item_text_link" type="url" placeholder="Ссылка на картинку"
                             name="form__link" required>
                     </fieldset>
                     <button class="form__submit-button" type="submit" value="save">Создать</button>
@@ -67,7 +67,7 @@
             </div>
         </div>
 
-        <div class="popup popup-view-photo">
+        <div class="popup popup_type_view-photo">
             <div class="popup__content">
                 <button class="popup__close-button" type="button" aria-label="Закрыть"></button>
                 <img class="popup__image" src="#" alt="#">
@@ -87,7 +87,8 @@
             </div>
         </article>
     </template>
-    <script src="./script/script.js"></script>
+    <script src="./scripts/cards.js"></script>
+    <script src="./scripts/index.js"></script>
 </body>
 
 </html>
