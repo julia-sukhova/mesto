@@ -30,18 +30,18 @@ const photoCardsSectionElement = document.querySelector('.elements');
 const photoCardTemplate = document.querySelector('#template-photo-card').content;
 const photoCardTemplateElement = photoCardTemplate.querySelector('.element');
 
-function newPhotoCard(name, link) {
+function createPhotoCard(cardData) {
     const newPhotoCardElement = photoCardTemplateElement.cloneNode(true);
     const photoCardImageElement = newPhotoCardElement.querySelector('.element__image');
-    photoCardImageElement.setAttribute('src', link);
-    photoCardImageElement.setAttribute('alt', name);
+    photoCardImageElement.setAttribute('src', cardData.link);
+    photoCardImageElement.setAttribute('alt', cardData.name);
     photoCardImageElement.addEventListener('click', () => {
-        popupViewImage.setAttribute('src', link);
-        popupViewImage.setAttribute('alt', name);
-        popupViewCaption.textContent = name;
+        popupViewImage.setAttribute('src', cardData.link);
+        popupViewImage.setAttribute('alt', cardData.name);
+        popupViewCaption.textContent = cardData.name;
         openPopup(popupViewPhotoElement);
     });
-    newPhotoCardElement.querySelector('.element__title').textContent = name;
+    newPhotoCardElement.querySelector('.element__title').textContent = cardData.name;
     newPhotoCardElement.querySelector('.element__button').addEventListener('click', (event) => {
         event.srcElement.classList.toggle('element__button_active');
     });
@@ -60,7 +60,7 @@ function closePopup(popupElement) {
 }
 
 initialPhotoCards.forEach((photoCardData) => {
-    const photoCard = newPhotoCard(photoCardData.name, photoCardData.link);
+    const photoCard = createPhotoCard(photoCardData);
     photoCardsSectionElement.append(photoCard);
 });
 
@@ -95,7 +95,11 @@ popupPhotoCardCloseButton.addEventListener('click', () => {
 
 photoCardFormElement.addEventListener('submit', (event) => {
     event.preventDefault();
-    const photoCard = newPhotoCard(photoCardFormNameInput.value, photoCardFormLinkInput.value);
+    const photoCardData = {
+        name: photoCardFormNameInput.value,
+        link: photoCardFormLinkInput.value
+    };
+    const photoCard = createPhotoCard(photoCardData);
     photoCardsSectionElement.prepend(photoCard);
     closePopup(popupPhotoCardElement);
 });
