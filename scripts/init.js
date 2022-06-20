@@ -1,20 +1,13 @@
-function initPhotoCards() {
+const initPhotoCards = () => {
     initialPhotoCards.forEach((photoCardData) => {
         const photoCard = createPhotoCard(photoCardData);
         photoCardsSectionElement.append(photoCard);
     });
 }
 
-function initProfilePopupInput() {
-    profileFormNameInput.value = profileNameElement.textContent;
-    profileFormJobInput.value = profileSubtitleElement.textContent;
-}
-
-function initPage() {
+const initPage = () => {
     initPhotoCards();
-    initProfilePopupInput();
-
-    enableValidation({
+    initValidation({
         formSelector: '.form',
         inputSelector: '.form__item',
         submitButtonSelector: '.form__submit-button',

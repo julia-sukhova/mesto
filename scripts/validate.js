@@ -1,28 +1,20 @@
-function showInputError(config, formElement, inputElement, errorMessage) {
+const showInputError = (config, formElement, inputElement, errorMessage) => {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
     inputElement.classList.add(config.inputErrorClass);
     errorElement.classList.add(config.errorClass);
     errorElement.textContent = errorMessage;
 };
 
-function hideInputError(config, formElement, inputElement) {
+const hideInputError = (config, formElement, inputElement) => {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
     inputElement.classList.remove(config.inputErrorClass);
     errorElement.classList.remove(config.errorClass);
     errorElement.textContent = '';
 };
 
-function toggleButtonState(config, buttonElement, inputList) {
-    if (allInputValid(inputList)) {
-        buttonElement.classList.remove(config.inactiveButtonClass);
-    } else {
-        buttonElement.classList.add(config.inactiveButtonClass);
-    }
-}
-
-function isInputValid(inputElement) {
+const isInputValid = (inputElement) => {
+    inputElement.setCustomValidity('');
     if (!inputElement.validity.valid) {
-        inputElement.setCustomValidity('');
         return false
     }
     const v = inputElement.value;
@@ -34,38 +26,52 @@ function isInputValid(inputElement) {
         inputElement.setCustomValidity('Please remove trailing spaces');
         return false
     }
-    inputElement.setCustomValidity('');
     return true
 }
 
-function allInputValid(inputList) {
-    return inputList.every((inputElement) => {
-        return isInputValid(inputElement);
-    });
+const toggleInputState = (config, formElement, inputElement, isValid) => {
+    if (isValid) {
+        hideInputError(config, formElement, inputElement);
+    } else {
+        showInputError(config, formElement, inputElement, inputElement.validationMessage);
+    }
 }
 
-function setEventListeners(config, formElement) {
+const toggleButtonState = (config, buttonElement, isFormValid) => {
+    if (isFormValid) {
+        buttonElement.classList.remove(config.inactiveButtonClass);
+    } else {
+        buttonElement.classList.add(config.inactiveButtonClass);
+    }
+}
+
+const validateForm = (config, formElement, buttonElement, inputList) => {
+    let isFormValid = true;
+    inputList.forEach((inputElement) => {
+        const isValid = isInputValid(inputElement);
+        isFormValid &&= isValid;
+        toggleInputState(config, formElement, inputElement, isValid);
+    });
+    toggleButtonState(config, buttonElement, isFormValid);
+}
+
+const initFormValidation = (config, formElement) => {
     const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
     const buttonElement = formElement.querySelector(config.submitButtonSelector);
-    toggleButtonState(config, buttonElement, inputList);
+    const popupElement = formElement.closest('.popup');
+    popupElement.validate = () => {
+        validateForm(config, formElement, buttonElement, inputList);
+    }
     inputList.forEach((inputElement) => {
         inputElement.addEventListener('input', function () {
-            if (isInputValid(inputElement)) {
-                hideInputError(config, formElement, inputElement);
-            } else {
-                showInputError(config, formElement, inputElement, inputElement.validationMessage);
-            }
-            toggleButtonState(config, buttonElement, inputList);
+            validateForm(config, formElement, buttonElement, inputList);
         });
     });
 }
 
-function enableValidation(config) {
+const initValidation = (config) => {
     const formList = Array.from(document.querySelectorAll(config.formSelector));
     formList.forEach((formElement) => {
-        formElement.addEventListener('submit', (evt) => {
-            evt.preventDefault();
-        });
-        setEventListeners(config, formElement);
+        initFormValidation(config, formElement);
     });
 }

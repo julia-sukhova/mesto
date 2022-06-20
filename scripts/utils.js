@@ -1,15 +1,16 @@
-function onEscapeClosePopupHandler(event) {
+const onEscapeClosePopupHandler = (event) => {
     if (event.key === 'Escape') {
         closePopup(null);
     }
 }
 
-function openPopup(popupElement) {
+const openPopup = (popupElement) => {
+    popupElement.validate();
     popupElement.classList.add('popup_opened');
     document.addEventListener('keydown', onEscapeClosePopupHandler);
 }
 
-function closePopup(popupElement) {
+const closePopup = (popupElement) => {
     if (popupElement === null) {
         popupElement = document.querySelector('.popup_opened');
     }
@@ -20,7 +21,7 @@ function closePopup(popupElement) {
     document.removeEventListener('keydown', onEscapeClosePopupHandler);
 }
 
-function handlePopupClose(popupElement) {
+const handlePopupClose = (popupElement) => {
     popupElement.addEventListener('click', (event) => {
         if (!event.target.classList.contains('popup__close-button') && event.target.closest('.popup__container,.popup__content') !== null) {
             return;
@@ -29,7 +30,7 @@ function handlePopupClose(popupElement) {
     });
 }
 
-function createPhotoCard(cardData) {
+const createPhotoCard = (cardData) => {
     const newPhotoCardElement = photoCardTemplateElement.cloneNode(true);
     const photoCardImageElement = newPhotoCardElement.querySelector('.element__image');
     photoCardImageElement.setAttribute('src', cardData.link);
