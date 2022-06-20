@@ -1,14 +1,6 @@
-const onEscapeClosePopupHandler = (event) => {
-    if (event.key === 'Escape') {
-        closePopup(null);
-    }
-}
-
 const openPopup = (popupElement) => {
-    popupElement.validate();
     popupElement.classList.add('popup_opened');
-    document.addEventListener('keydown', onEscapeClosePopupHandler);
-}
+};
 
 const closePopup = (popupElement) => {
     if (popupElement === null) {
@@ -18,17 +10,7 @@ const closePopup = (popupElement) => {
         return;
     }
     popupElement.classList.remove('popup_opened');
-    document.removeEventListener('keydown', onEscapeClosePopupHandler);
-}
-
-const handlePopupClose = (popupElement) => {
-    popupElement.addEventListener('click', (event) => {
-        if (!event.target.classList.contains('popup__close-button') && event.target.closest('.popup__container,.popup__content') !== null) {
-            return;
-        }
-        closePopup(popupElement);
-    });
-}
+};
 
 const createPhotoCard = (cardData) => {
     const newPhotoCardElement = photoCardTemplateElement.cloneNode(true);
@@ -49,4 +31,4 @@ const createPhotoCard = (cardData) => {
         newPhotoCardElement.remove();
     });
     return newPhotoCardElement;
-}
+};

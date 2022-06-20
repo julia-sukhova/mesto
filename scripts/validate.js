@@ -13,20 +13,11 @@ const hideInputError = (config, formElement, inputElement) => {
 };
 
 const isInputValid = (inputElement) => {
-    inputElement.setCustomValidity('');
-    if (!inputElement.validity.valid) {
-        return false
-    }
-    const v = inputElement.value;
-    if (v.length > 0 && v[0] == ' ') {
-        inputElement.setCustomValidity('Plase remove spaces from the beggining');
-        return false
-    }
-    if (v.length > 0 && v[v.length - 1] == ' ') {
-        inputElement.setCustomValidity('Please remove trailing spaces');
-        return false
-    }
-    return true
+    return inputElement.validity.valid;
+};
+
+const processInputValue = (inputElement) => {
+    inputElement.value = inputElement.value.trimLeft();
 }
 
 const toggleInputState = (config, formElement, inputElement, isValid) => {
@@ -35,7 +26,7 @@ const toggleInputState = (config, formElement, inputElement, isValid) => {
     } else {
         showInputError(config, formElement, inputElement, inputElement.validationMessage);
     }
-}
+};
 
 const toggleButtonState = (config, buttonElement, isFormValid) => {
     if (isFormValid) {
@@ -43,7 +34,7 @@ const toggleButtonState = (config, buttonElement, isFormValid) => {
     } else {
         buttonElement.classList.add(config.inactiveButtonClass);
     }
-}
+};
 
 const validateForm = (config, formElement, buttonElement, inputList) => {
     let isFormValid = true;
@@ -53,25 +44,29 @@ const validateForm = (config, formElement, buttonElement, inputList) => {
         toggleInputState(config, formElement, inputElement, isValid);
     });
     toggleButtonState(config, buttonElement, isFormValid);
-}
+};
 
 const initFormValidation = (config, formElement) => {
     const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
     const buttonElement = formElement.querySelector(config.submitButtonSelector);
-    const popupElement = formElement.closest('.popup');
-    popupElement.validate = () => {
-        validateForm(config, formElement, buttonElement, inputList);
-    }
     inputList.forEach((inputElement) => {
-        inputElement.addEventListener('input', function () {
+        inputElement.addEventListener('input', function (event) {
+            processInputValue(inputElement);
             validateForm(config, formElement, buttonElement, inputList);
         });
     });
-}
+};
+
+const validate = (config, element) => {
+    const formElement = element.querySelector(config.formSelector);
+    const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
+    const buttonElement = formElement.querySelector(config.submitButtonSelector);
+    validateForm(config, formElement, buttonElement, inputList);
+};
 
 const initValidation = (config) => {
     const formList = Array.from(document.querySelectorAll(config.formSelector));
     formList.forEach((formElement) => {
         initFormValidation(config, formElement);
     });
-}
+};

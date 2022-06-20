@@ -3,16 +3,29 @@ const initPhotoCards = () => {
         const photoCard = createPhotoCard(photoCardData);
         photoCardsSectionElement.append(photoCard);
     });
-}
+};
+
+const initGlobalHanlders = () => {
+    document.addEventListener('mousedown', (event) => {
+        if (event.target.classList.contains('popup_opened')) {
+            closePopup(event.target);
+            return;
+        }
+        if (event.target.classList.contains('popup__close-button')) {
+            const popup = event.target.closest('.popup');
+            closePopup(popup);
+            return;
+        }
+    });
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            closePopup(null);
+        }
+    });
+};
 
 const initPage = () => {
     initPhotoCards();
-    initValidation({
-        formSelector: '.form',
-        inputSelector: '.form__item',
-        submitButtonSelector: '.form__submit-button',
-        inactiveButtonClass: 'form__submit-button_disabled',
-        inputErrorClass: 'form__item_type_error',
-        errorClass: 'form__item-error'
-    });
-}
+    initGlobalHanlders();
+    initValidation(validationConfig);
+};

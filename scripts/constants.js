@@ -37,3 +37,13 @@ const photoCardsSectionElement = document.querySelector('.elements');
 const popupViewPhotoElement = document.querySelector('.popup_type_view-photo');
 const popupViewImage = popupViewPhotoElement.querySelector('.popup__image');
 const popupViewCaption = popupViewPhotoElement.querySelector('.popup__caption');
+
+// validation
+const validationConfig = {
+    formSelector: '.form',
+    inputSelector: '.form__item',
+    submitButtonSelector: '.form__submit-button',
+    inactiveButtonClass: 'form__submit-button_disabled',
+    inputErrorClass: 'form__item_type_error',
+    errorClass: 'form__item-error'
+};
