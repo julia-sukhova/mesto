@@ -1,15 +1,15 @@
 const showInputError = (config, formElement, inputElement, errorMessage) => {
-    const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+    const errorItem = formElement.querySelector(`.${inputElement.id}-error`);
     inputElement.classList.add(config.inputErrorClass);
-    errorElement.classList.add(config.errorClass);
-    errorElement.textContent = errorMessage;
+    errorItem.classList.add(config.errorClass);
+    errorItem.textContent = errorMessage;
 };
 
 const hideInputError = (config, formElement, inputElement) => {
-    const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+    const errorItem = formElement.querySelector(`.${inputElement.id}-error`);
     inputElement.classList.remove(config.inputErrorClass);
-    errorElement.classList.remove(config.errorClass);
-    errorElement.textContent = '';
+    errorItem.classList.remove(config.errorClass);
+    errorItem.textContent = '';
 };
 
 const isInputValid = (inputElement) => {
