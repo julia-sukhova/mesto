@@ -1,59 +1,71 @@
-// включение валидации вызовом enableValidation
-// все настройки передаются при вызове
-
-/*enableValidation ({
-    formSelector: '.form',
-    inputSelector: '.form__item',
-    submitButtonSelector: '.form__submit-button',
-    inactiveButtonClass: '',
-    inputErrorClass: '.form__item_type_error',
-    errorClass: 'form__item-error'
-});*/
-
-const form = document.querySelector('.form');
-const formInput = form.querySelector('.form__item');
-const formError = form.querySelector(`.${formInput.id}-error`);
-
-const showInputError = (formElement, inputElement, errorMessage) => {
+function showInputError(config, formElement, inputElement, errorMessage) {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    inputElement.classList.add('form__item_type_error');
+    inputElement.classList.add(config.inputErrorClass);
+    errorElement.classList.add(config.errorClass);
     errorElement.textContent = errorMessage;
-    errorElement.classList.add('form__item-error_active');
 };
 
-const hideInputError = (formElement, inputElement) => {
+function hideInputError(config, formElement, inputElement) {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    inputElement.classList.remove('form__item_type_error');
-    errorElement.classList.remove('form__item-error_active');
+    inputElement.classList.remove(config.inputErrorClass);
+    errorElement.classList.remove(config.errorClass);
     errorElement.textContent = '';
 };
 
-const checkInputValidity = (formElement, inputElement) => {
-    if (!inputElement.validity.valid) {
-        showInputError(formElement, inputElement, inputElement.validationMessage);
+function toggleButtonState(config, buttonElement, inputList) {
+    if (allInputValid(inputList)) {
+        buttonElement.classList.remove(config.inactiveButtonClass);
     } else {
-        hideInputError(formElement, inputElement);
+        buttonElement.classList.add(config.inactiveButtonClass);
     }
-};
+}
 
-const setEventListeners = (formElement) => {
-    const inputList = Array.from(formElement.querySelectorAll('.form__item'));
+function isInputValid(inputElement) {
+    if (!inputElement.validity.valid) {
+        inputElement.setCustomValidity('');
+        return false
+    }
+    const v = inputElement.value;
+    if (v.length > 0 && v[0] == ' ') {
+        inputElement.setCustomValidity('Plase remove spaces from the beggining');
+        return false
+    }
+    if (v.length > 0 && v[v.length - 1] == ' ') {
+        inputElement.setCustomValidity('Please remove trailing spaces');
+        return false
+    }
+    inputElement.setCustomValidity('');
+    return true
+}
+
+function allInputValid(inputList) {
+    return inputList.every((inputElement) => {
+        return isInputValid(inputElement);
+    });
+}
+
+function setEventListeners(config, formElement) {
+    const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
+    const buttonElement = formElement.querySelector(config.submitButtonSelector);
+    toggleButtonState(config, buttonElement, inputList);
     inputList.forEach((inputElement) => {
         inputElement.addEventListener('input', function () {
-            checkInputValidity(formElement, inputElement);
+            if (isInputValid(inputElement)) {
+                hideInputError(config, formElement, inputElement);
+            } else {
+                showInputError(config, formElement, inputElement, inputElement.validationMessage);
+            }
+            toggleButtonState(config, buttonElement, inputList);
         });
     });
-};
+}
 
-const enableValidation = () => {
-    const formList = Array.from(document.querySelectorAll('.form'));
+function enableValidation(config) {
+    const formList = Array.from(document.querySelectorAll(config.formSelector));
     formList.forEach((formElement) => {
         formElement.addEventListener('submit', (evt) => {
             evt.preventDefault();
         });
-
-        setEventListeners(formElement);
+        setEventListeners(config, formElement);
     });
-
 }
-enableValidation();
