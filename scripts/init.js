@@ -1,4 +1,34 @@
-const initPhotoCards = () => {
+import { closePopup, createPhotoCard } from "./utils.js";
+import { initValidation, validationConfig } from "./validate.js";
+
+const initialPhotoCards = [
+    {
+        name: 'Архыз',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+    },
+    {
+        name: 'Челябинская область',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+    },
+    {
+        name: 'Иваново',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+    },
+    {
+        name: 'Камчатка',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+    },
+    {
+        name: 'Холмогорский район',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+    },
+    {
+        name: 'Байкал',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+    }
+];
+
+const initPhotoCards = (photoCardsSectionElement) => {
     initialPhotoCards.forEach((photoCardData) => {
         const photoCard = createPhotoCard(photoCardData);
         photoCardsSectionElement.append(photoCard);
@@ -24,8 +54,10 @@ const initGlobalHanlders = () => {
     });
 };
 
-const initPage = () => {
-    initPhotoCards();
+const initPage = (photoCardsSectionElement) => {
+    initPhotoCards(photoCardsSectionElement);
     initGlobalHanlders();
     initValidation(validationConfig);
 };
+
+export { initPage };

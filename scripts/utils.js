@@ -1,3 +1,15 @@
+// photocard template
+
+const photoCardTemplate = document.querySelector('#template-photo-card').content;
+const photoCardTemplateElement = photoCardTemplate.querySelector('.element');
+
+// preview photocard section
+
+const popupViewPhotoElement = document.querySelector('.popup_type_view-photo');
+const popupViewImage = popupViewPhotoElement.querySelector('.popup__image');
+const popupViewCaption = popupViewPhotoElement.querySelector('.popup__caption');
+
+
 const openPopup = (popupElement) => {
     popupElement.classList.add('popup_opened');
 };
@@ -32,3 +44,5 @@ const createPhotoCard = (cardData) => {
     });
     return newPhotoCardElement;
 };
+
+export { openPopup, closePopup, createPhotoCard };
