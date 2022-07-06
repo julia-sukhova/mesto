@@ -30,8 +30,8 @@ const initialPhotoCards = [
 
 const initPhotoCards = (photoCardsSectionElement) => {
     initialPhotoCards.forEach((photoCardData) => {
-        const photoCard = createPhotoCard(photoCardData);
-        photoCardsSectionElement.append(photoCard);
+        const card = createPhotoCard(photoCardData);
+        photoCardsSectionElement.append(card);
     });
 };
 
@@ -60,4 +60,4 @@ const initPage = (photoCardsSectionElement) => {
     initValidation(validationConfig);
 };
 
-export { initPage };
+export { initPage, createPhotoCard };

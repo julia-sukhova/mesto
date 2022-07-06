@@ -58,8 +58,8 @@ photoCardFormElement.addEventListener('submit', (event) => {
         name: photoCardFormNameInput.value.trim(),
         link: photoCardFormLinkInput.value.trim()
     };
-    const photoCard = createPhotoCard(photoCardData);
-    photoCardsSectionElement.prepend(photoCard);
+    const card = createPhotoCard(photoCardData);
+    photoCardsSectionElement.prepend(card);
     closePopup(popupPhotoCardElement);
 });
 
