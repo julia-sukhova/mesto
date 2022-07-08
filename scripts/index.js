@@ -1,6 +1,6 @@
 import { initPage } from './init.js';
 import { openPopup, closePopup, createPhotoCard } from './utils.js';
-import { validate, validationConfig } from './validate.js';
+import { FormValidator } from './FormValidator.js';
 
 // profile section
 
@@ -31,10 +31,25 @@ const photoCardFormLinkInput = popupPhotoCardElement.querySelector('.form__item_
 
 const photoCardsSectionElement = document.querySelector('.elements');
 
+// validation
+const validationConfig = {
+    formSelector: '.form',
+    inputSelector: '.form__item',
+    submitButtonSelector: '.form__submit-button',
+    inactiveButtonClass: 'form__submit-button_disabled',
+    inputErrorClass: 'form__item_type_error',
+    errorClass: 'form__item-error'
+};
+const profileFormValidator = new FormValidator(validationConfig, profileFormElement);
+profileFormValidator.enableValidation();
+const photoCardFormValidator = new FormValidator(validationConfig, photoCardFormElement);
+photoCardFormValidator.enableValidation();
+
+
 profileEditButton.addEventListener('click', () => {
     profileFormNameInput.value = profileNameElement.textContent;
     profileFormJobInput.value = profileSubtitleElement.textContent;
-    validate(validationConfig, popupProfileElement);
+    profileFormValidator.validate();
     openPopup(popupProfileElement);
 });
 
@@ -48,7 +63,7 @@ profileFormElement.addEventListener('submit', (event) => {
 popupPhotoCardShowButton.addEventListener('click', () => {
     photoCardFormNameInput.value = '';
     photoCardFormLinkInput.value = '';
-    validate(validationConfig, popupPhotoCardElement);
+    photoCardFormValidator.validate();
     openPopup(popupPhotoCardElement);
 });
 

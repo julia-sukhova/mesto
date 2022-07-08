@@ -1,4 +1,4 @@
-import { Card } from './card.js';
+import { Card } from './Card.js';
 
 const openPopup = (popupElement) => {
     popupElement.classList.add('popup_opened');

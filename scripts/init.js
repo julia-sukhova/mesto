@@ -1,5 +1,4 @@
 import { closePopup, createPhotoCard } from "./utils.js";
-import { initValidation, validationConfig } from "./validate.js";
 
 const initialPhotoCards = [
     {
@@ -35,6 +34,7 @@ const initPhotoCards = (photoCardsSectionElement) => {
     });
 };
 
+
 const initGlobalHanlders = () => {
     document.addEventListener('mousedown', (event) => {
         if (event.target.classList.contains('popup_opened')) {
@@ -57,7 +57,6 @@ const initGlobalHanlders = () => {
 const initPage = (photoCardsSectionElement) => {
     initPhotoCards(photoCardsSectionElement);
     initGlobalHanlders();
-    initValidation(validationConfig);
 };
 
-export { initPage, createPhotoCard };
+export { initPage };
