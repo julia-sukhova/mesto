@@ -1,4 +1,3 @@
-import { initPage } from './init.js';
 import { openPopup, closePopup, createPhotoCard } from './utils.js';
 import { FormValidator } from './FormValidator.js';
 
@@ -28,8 +27,37 @@ const photoCardFormNameInput = popupPhotoCardElement.querySelector('.form__item_
 const photoCardFormLinkInput = popupPhotoCardElement.querySelector('.form__item_text_link');
 
 // photocards section
-
+const initialPhotoCards = [
+    {
+        name: 'Архыз',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+    },
+    {
+        name: 'Челябинская область',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+    },
+    {
+        name: 'Иваново',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+    },
+    {
+        name: 'Камчатка',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+    },
+    {
+        name: 'Холмогорский район',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+    },
+    {
+        name: 'Байкал',
+        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+    }
+];
 const photoCardsSectionElement = document.querySelector('.elements');
+initialPhotoCards.forEach((photoCardData) => {
+    const card = createPhotoCard(photoCardData);
+    photoCardsSectionElement.append(card);
+});
 
 // validation
 const validationConfig = {
@@ -45,6 +73,16 @@ profileFormValidator.enableValidation();
 const photoCardFormValidator = new FormValidator(validationConfig, photoCardFormElement);
 photoCardFormValidator.enableValidation();
 
+// init popup event listeners
+const popups = document.querySelectorAll('.popup');
+popups.forEach((popup) => {
+    popup.addEventListener('mousedown', (event) => {
+        if (event.target.classList.contains('popup_opened') ||
+            event.target.classList.contains('popup__close-button')) {
+            closePopup(popup);
+        }
+    });
+});
 
 profileEditButton.addEventListener('click', () => {
     profileFormNameInput.value = profileNameElement.textContent;
@@ -77,5 +115,3 @@ photoCardFormElement.addEventListener('submit', (event) => {
     photoCardsSectionElement.prepend(card);
     closePopup(popupPhotoCardElement);
 });
-
-initPage(photoCardsSectionElement);
