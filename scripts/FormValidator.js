@@ -32,10 +32,10 @@ class FormValidator {
         }
     }
 
-    _toggleButtonState(isFormValid) {
-        if (isFormValid) {
+    setSubmitButtonState(activeState) {
+        if (activeState) {
             this._buttonElement.classList.remove(this._config.inactiveButtonClass);
-            this._buttonElement.setAttribute('disabled', false);
+            this._buttonElement.removeAttribute('disabled');
         } else {
             this._buttonElement.classList.add(this._config.inactiveButtonClass);
             this._buttonElement.setAttribute('disabled', true);
@@ -45,11 +45,14 @@ class FormValidator {
     validate() {
         let isFormValid = true;
         this._inputList.forEach((inputElement) => {
+            if (!isFormValid) {
+                return;
+            }
             const isValid = this._isInputValid(inputElement);
             isFormValid = isFormValid && isValid;
             this._toggleInputState(inputElement, isValid);
         });
-        this._toggleButtonState(isFormValid);
+        this.setSubmitButtonState(isFormValid);
     }
 
     enableValidation() {

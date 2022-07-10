@@ -14,6 +14,10 @@ const onEscapeClosePopup = (event) => {
 const openPopup = (popupElement) => {
     popupElement.classList.add(popupOpenedClass);
     document.addEventListener('keydown', onEscapeClosePopup); // keydown event isn't captured on div element even with tabindex and explicit focus call
+    const button = popupElement.querySelector('.form__submit-button');
+    if (button !== null) {
+        button.focus();
+    }
 };
 
 const closePopup = (popupElement) => {

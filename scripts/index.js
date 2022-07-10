@@ -68,6 +68,7 @@ const validationConfig = {
     inputErrorClass: 'form__item_type_error',
     errorClass: 'form__item-error'
 };
+
 const profileFormValidator = new FormValidator(validationConfig, profileFormElement);
 profileFormValidator.enableValidation();
 const photoCardFormValidator = new FormValidator(validationConfig, photoCardFormElement);
@@ -101,7 +102,7 @@ profileFormElement.addEventListener('submit', (event) => {
 popupPhotoCardShowButton.addEventListener('click', () => {
     photoCardFormNameInput.value = '';
     photoCardFormLinkInput.value = '';
-    photoCardFormValidator.validate();
+    photoCardFormValidator.setSubmitButtonState(false);
     openPopup(popupPhotoCardElement);
 });
 
