@@ -88,7 +88,8 @@ popups.forEach((popup) => {
 profileEditButton.addEventListener('click', () => {
     profileFormNameInput.value = profileNameElement.textContent;
     profileFormJobInput.value = profileSubtitleElement.textContent;
-    profileFormValidator.validate();
+    profileFormValidator.resetValidationState();
+    profileFormValidator.setSubmitButtonDisabled(false);
     openPopup(popupProfileElement);
 });
 
@@ -102,7 +103,8 @@ profileFormElement.addEventListener('submit', (event) => {
 popupPhotoCardShowButton.addEventListener('click', () => {
     photoCardFormNameInput.value = '';
     photoCardFormLinkInput.value = '';
-    photoCardFormValidator.setSubmitButtonState(false);
+    photoCardFormValidator.resetValidationState();
+    photoCardFormValidator.setSubmitButtonDisabled(true);
     openPopup(popupPhotoCardElement);
 });
 
