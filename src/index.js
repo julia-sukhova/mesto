@@ -1,3 +1,4 @@
+import './pages/index.css';
 import { Card } from './Card.js';
 import { PopupWithForm } from './PopupWithForm.js';
 import { PopupWithImage } from './PopupWithImage.js';
