@@ -1,32 +1,11 @@
-import { openPopup, closePopup, createPhotoCard } from './utils.js';
-import { FormValidator } from './FormValidator.js';
+import { Card } from './Card.js';
+import { PopupWithForm } from './PopupWithForm.js';
+import { PopupWithImage } from './PopupWithImage.js';
+import { Section } from './Section.js';
+import { UserInfo } from './UserInfo.js';
 
-// profile section
+// default photocards
 
-const popupProfileElement = document.querySelector('.popup_type_user');
-const profileEditButton = document.querySelector('.profile__edit-button');
-
-const profileNameElement = document.querySelector('.profile__name');
-const profileSubtitleElement = document.querySelector('.profile__subtitle');
-
-// edit pofile form
-
-const profileFormElement = popupProfileElement.querySelector('.form');
-const profileFormNameInput = popupProfileElement.querySelector('.form__item_text_name');
-const profileFormJobInput = popupProfileElement.querySelector('.form__item_text_subtitle');
-
-// new photocard section
-
-const popupPhotoCardElement = document.querySelector('.popup_type_photo-card');
-const popupPhotoCardShowButton = document.querySelector('.profile__add-button');
-
-// add photocard form
-
-const photoCardFormElement = popupPhotoCardElement.querySelector('.form');
-const photoCardFormNameInput = popupPhotoCardElement.querySelector('.form__item_text_name');
-const photoCardFormLinkInput = popupPhotoCardElement.querySelector('.form__item_text_link');
-
-// photocards section
 const initialPhotoCards = [
     {
         name: 'Архыз',
@@ -53,11 +32,6 @@ const initialPhotoCards = [
         link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
     }
 ];
-const photoCardsSectionElement = document.querySelector('.elements');
-initialPhotoCards.forEach((photoCardData) => {
-    const card = createPhotoCard(photoCardData);
-    photoCardsSectionElement.append(card);
-});
 
 // validation
 const validationConfig = {
@@ -69,52 +43,48 @@ const validationConfig = {
     errorClass: 'form__item-error'
 };
 
-const profileFormValidator = new FormValidator(validationConfig, profileFormElement);
-profileFormValidator.enableValidation();
-const photoCardFormValidator = new FormValidator(validationConfig, photoCardFormElement);
-photoCardFormValidator.enableValidation();
+const createPhotoCard = (photoCardData) => {
+    const photoCard = new Card(photoCardData, '#template-photo-card', () => {
+        const popup = new PopupWithImage('.popup_type_view-photo', '.popup__image', '.popup__caption', photoCardData);
+        popup.setEventListeners();
+        popup.open();
+    });
+    return photoCard.render();
+};
 
-// init popup event listeners
-const popups = document.querySelectorAll('.popup');
-popups.forEach((popup) => {
-    popup.addEventListener('mousedown', (event) => {
-        if (event.target.classList.contains('popup_opened') ||
-            event.target.classList.contains('popup__close-button')) {
-            closePopup(popup);
-        }
+const userInfo = new UserInfo('.profile__name', '.profile__subtitle');
+
+const editProfilePopup = new PopupWithForm('.popup_type_user', '.form', '.form__submit-button', validationConfig, (inputs) => {
+    userInfo.setUserInfo({
+        name: inputs['form__name'].trim(),
+        info: inputs['form__job'].trim()
     });
 });
+editProfilePopup.setEventListeners();
 
-profileEditButton.addEventListener('click', () => {
-    profileFormNameInput.value = profileNameElement.textContent;
-    profileFormJobInput.value = profileSubtitleElement.textContent;
-    profileFormValidator.resetValidationState();
-    profileFormValidator.setSubmitButtonDisabled(false);
-    openPopup(popupProfileElement);
-});
-
-profileFormElement.addEventListener('submit', (event) => {
-    event.preventDefault();
-    profileNameElement.textContent = profileFormNameInput.value.trim();
-    profileSubtitleElement.textContent = profileFormJobInput.value.trim();
-    closePopup(popupProfileElement);
-});
-
-popupPhotoCardShowButton.addEventListener('click', () => {
-    photoCardFormNameInput.value = '';
-    photoCardFormLinkInput.value = '';
-    photoCardFormValidator.resetValidationState();
-    photoCardFormValidator.setSubmitButtonDisabled(true);
-    openPopup(popupPhotoCardElement);
-});
-
-photoCardFormElement.addEventListener('submit', (event) => {
-    event.preventDefault();
+const addNewCardPopup = new PopupWithForm('.popup_type_photo-card', '.form', '.form__submit-button', validationConfig, (inputs) => {
     const photoCardData = {
-        name: photoCardFormNameInput.value.trim(),
-        link: photoCardFormLinkInput.value.trim()
+        name: inputs['form__name'].trim(),
+        link: inputs['form__link'].trim()
     };
     const card = createPhotoCard(photoCardData);
-    photoCardsSectionElement.prepend(card);
-    closePopup(popupPhotoCardElement);
+    imagesSection.addItem(card);
+});
+addNewCardPopup.setEventListeners();
+
+const imagesSection = new Section({
+    items: initialPhotoCards,
+    renderer: (photoCardData) => {
+        return createPhotoCard(photoCardData)
+    }
+}, '.elements');
+
+imagesSection.render();
+
+document.querySelector('.profile__edit-button').addEventListener('click', () => {
+    editProfilePopup.open();
+});
+
+document.querySelector('.profile__add-button').addEventListener('click', () => {
+    addNewCardPopup.open();
 });

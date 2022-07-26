@@ -1,14 +1,9 @@
-import { openPopup } from './utils.js';
-
-const popupViewPhotoElement = document.querySelector('.popup_type_view-photo');
-const popupViewImage = popupViewPhotoElement.querySelector('.popup__image');
-const popupViewCaption = popupViewPhotoElement.querySelector('.popup__caption');
-
 class Card {
-    constructor(data, templateSelector) {
-        this._name = data.name;
-        this._link = data.link;
+    constructor({ name, link }, templateSelector, handleCardClick) {
+        this._name = name;
+        this._link = link;
         this._templateSelector = templateSelector;
+        this._handleCardClick = handleCardClick;
     }
 
     _getTemplate() {
@@ -33,13 +28,6 @@ class Card {
         this._element.remove();
     }
 
-    _onImagePopupHandler() {
-        popupViewImage.setAttribute('src', this._link);
-        popupViewImage.setAttribute('alt', this._name);
-        popupViewCaption.textContent = this._name;
-        openPopup(popupViewPhotoElement);
-    }
-
     _setEventListeners() {
         this._cardLikeButton.addEventListener('click', () => {
             this._onLikeToggleHandler();
@@ -48,7 +36,7 @@ class Card {
             this._onDeleteHandler()
         });
         this._cardImageElement.addEventListener('click', () => {
-            this._onImagePopupHandler();
+            this._handleCardClick();
         });
     }
 
