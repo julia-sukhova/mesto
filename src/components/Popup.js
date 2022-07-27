@@ -1,4 +1,4 @@
-const popupOpenedClass = 'popup_opened';
+import { popupOpenedClass } from '../utils/constants.js';
 
 class Popup {
     constructor(popupSelector) {
