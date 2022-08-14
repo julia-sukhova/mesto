@@ -1,5 +1,6 @@
 import './index.css';
 import { Card } from '../components/Card.js';
+import { Api } from '../components/Api.js';
 import { PopupWithForm } from '../components/PopupWithForm.js';
 import { PopupWithImage } from '../components/PopupWithImage.js';
 import { PopupWithSubmit } from '../components/PopupWithSubmit.js';
@@ -7,6 +8,14 @@ import { Section } from '../components/Section.js';
 import { UserInfo } from '../components/UserInfo.js';
 import { authorizationToken, myId, validationConfig } from '../utils/constants.js';
 import { enableValidation, formValidators } from '../utils/validation.js';
+
+const api = new Api({
+    baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-47',
+    headers: {
+        authorization: authorizationToken,
+        'Content-Type': 'application/json'
+    }
+});
 
 enableValidation(validationConfig);
 const userInfo = new UserInfo('.profile__name', '.profile__subtitle', '.profile__avatar');
@@ -27,27 +36,16 @@ const imagesSection = new Section(
         }, (isLiked) => {
             let result;
             if (isLiked) {
-                result = fetch('https://mesto.nomoreparties.co/v1/cohort-47/cards/' + photoCardData._id + '/likes', {
-                    method: 'PUT',
-                    headers: {
-                        authorization: authorizationToken,
-                        'Content-Type': 'application/json'
-                    }
-                });
+                result = api.likeCard(photoCardData._id);
             } else {
-                result = fetch('https://mesto.nomoreparties.co/v1/cohort-47/cards/' + photoCardData._id + '/likes', {
-                    method: 'DELETE',
-                    headers: {
-                        authorization: authorizationToken,
-                        'Content-Type': 'application/json'
-                    }
-                });
+                result = api.dislikeCard(photoCardData._id);
             }
-            result.then(res => res.json())
-                .then((res) => {
-                    const likeCount = res.likes.length;
-                    photoCard.setLikeCount(likeCount);
-                });
+            result.then((res) => {
+                const likeCount = res.likes.length;
+                photoCard.setLikeCount(likeCount);
+            }).catch(err => {
+                console.log(`Ошибка лайка карточки: ${err}`);
+            });
         }, () => {
             confirmDeletePopup.open(() => {
                 fetch('https://mesto.nomoreparties.co/v1/cohort-47/cards/' + photoCardData._id, {
@@ -176,35 +174,23 @@ document.querySelector('.profile__container').addEventListener('click', () => {
 });
 
 // запрос для загрузки информации о пользователе
-
-fetch('https://nomoreparties.co/v1/cohort-47/users/me', {
-    headers: {
-        authorization: authorizationToken
-    }
-})
-    .then(res => res.json())
+api.getUserInfo()
     .then((result) => {
         userInfo.setUserInfo(result);
         userInfo.setAvatar(result);
     })
     .catch(err => {
-        console.log(err);
-    });;
+        console.log(`Ошибка загрузки инофрмации о пользователе: ${err}`);
+    });
 
 
 // запрос для загрузки карточек
-
-fetch('https://nomoreparties.co/v1/cohort-47/cards', {
-    headers: {
-        authorization: authorizationToken
-    }
-})
-    .then(res => res.json())
+api.getInitialCards()
     .then((result) => {
         imagesSection.setItems(result);
         imagesSection.render();
-    })
-    .catch(err => {
-        console.log(err);
+    }).catch(err => {
+        console.log(`Ошибка загрузки списка картинок: ${err}`);
     });
+
 
