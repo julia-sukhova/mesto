@@ -27,13 +27,44 @@ class Api {
         return this._wrapFetchResponse(fetch(this._baseUrl + '/cards/' + cardId + '/likes', {
             method: 'DELETE',
             headers: this._headers
-        }).then(res => res.json()));
+        })).then(res => res.json());
+    }
+
+    addNewCard(cardData) {
+        return this._wrapFetchResponse(fetch(this._baseUrl + '/cards', {
+            method: 'POST',
+            body: cardData,
+            headers: this._headers
+        })).then(res => res.json());
+    }
+
+    updateUserInfo(userData) {
+        return this._wrapFetchResponse(fetch(this._baseUrl + '/users/me', {
+            method: 'PATCH',
+            headers: this._headers,
+            body: userData
+        })).then(res => res.json());
+    }
+
+    deleteCard(cardId) {
+        return this._wrapFetchResponse(fetch(this._baseUrl + '/cards/' + cardId, {
+            method: 'DELETE',
+            headers: this._headers
+        })).then(res => res.json());
+    }
+
+    updateAvatar(data) {
+        return this._wrapFetchResponse(fetch(this._baseUrl + '/users/me/avatar', {
+            method: 'PATCH',
+            body: data,
+            headers: this._headers
+        })).then(res => res.json());
     }
 
     _wrapFetchResponse(res) {
         return res.then(res => {
             if (!res.ok) {
-                return Promise.reject(`fetch(): ${res.status}`);
+                return Promise.reject(`fetch(): ${res.body} (${res.status})`);
             }
             return res;
         });

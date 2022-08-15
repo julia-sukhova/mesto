@@ -48,16 +48,10 @@ const imagesSection = new Section(
             });
         }, () => {
             confirmDeletePopup.open(() => {
-                fetch('https://mesto.nomoreparties.co/v1/cohort-47/cards/' + photoCardData._id, {
-                    method: 'DELETE',
-                    headers: {
-                        authorization: authorizationToken,
-                        'Content-Type': 'application/json'
-                    }
-                })
+                api.deleteCard(photoCardData._id)
                     .then(() => photoCard.delete())
                     .catch(err => {
-                        console.log(err);
+                        console.log(`Ошибка удаления карточки: ${err}`);
                     });
             });
         });
@@ -79,17 +73,10 @@ const editProfilePopup = new PopupWithForm('.popup_type_user', '.form', '.form__
     },
     (inputs, done) => {
         // запрос на сохранение обновленной информации о пользователе
-        fetch('https://nomoreparties.co/v1/cohort-47/users/me', {
-            method: 'PATCH',
-            headers: {
-                authorization: authorizationToken,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(inputs)
-        })
-            .then(() => userInfo.setUserInfo(inputs))
+        api.updateUserInfo(JSON.stringify(inputs))
+            .then((res) => userInfo.setUserInfo(res))
             .catch(err => {
-                console.log(err);
+                console.log(`Ошибка обновления информации о пользователе: ${err}`)
             })
             .finally(done);
     });
@@ -109,23 +96,14 @@ const addNewCardPopup = new PopupWithForm('.popup_type_photo-card', '.form', '.f
         }
     },
     (inputs, done) => {
-        fetch('https://mesto.nomoreparties.co/v1/cohort-47/cards', {
-            method: 'POST',
-            body: JSON.stringify(inputs),
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-                authorization: authorizationToken
-            }
-        })
-            .then(res => res.json())
+        api.addNewCard(JSON.stringify(inputs))
             .then((res) => {
                 imagesSection.prependItem(res);
             })
             .catch(err => {
-                console.log(err);
+                console.log(`Ошибка добавления новой карточки: ${err}`);
             })
             .finally(done);
-
     });
 addNewCardPopup.setEventListeners();
 
@@ -143,19 +121,12 @@ const editNewProfilePhoto = new PopupWithForm('.popup_type_profile-photo', '.for
         }
     },
     (inputs, done) => {
-        fetch('https://mesto.nomoreparties.co/v1/cohort-47/users/me/avatar', {
-            method: 'PATCH',
-            body: JSON.stringify(inputs),
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-                authorization: authorizationToken
-            }
-        })
-            .then(() => {
-                userInfo.setAvatar(inputs);
+        api.updateAvatar(JSON.stringify(inputs))
+            .then((res) => {
+                userInfo.setAvatar(res);
             })
             .catch(err => {
-                console.log(err);
+                console.log(`Ошибка обновления аватара: ${err}`);
             })
             .finally(done);
     });
@@ -180,9 +151,8 @@ api.getUserInfo()
         userInfo.setAvatar(result);
     })
     .catch(err => {
-        console.log(`Ошибка загрузки инофрмации о пользователе: ${err}`);
+        console.log(`Ошибка загрузки информации о пользователе: ${err}`);
     });
-
 
 // запрос для загрузки карточек
 api.getInitialCards()
