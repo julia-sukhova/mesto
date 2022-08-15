@@ -23,7 +23,7 @@ const userInfo = new UserInfo('.profile__name', '.profile__subtitle', '.profile_
 const showImagePopup = new PopupWithImage('.popup_type_view-photo', '.popup__image', '.popup__caption');
 showImagePopup.setEventListeners();
 
-const confirmDeletePopup = new PopupWithSubmit('.popup_type_delete-card-confirm', '.form__submit-button');
+const confirmDeletePopup = new PopupWithSubmit('.popup_type_delete-card-confirm', '.popup__button');
 confirmDeletePopup.setEventListeners();
 
 const imagesSection = new Section(
