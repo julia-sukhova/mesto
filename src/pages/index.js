@@ -6,7 +6,7 @@ import { PopupWithImage } from '../components/PopupWithImage.js';
 import { PopupWithSubmit } from '../components/PopupWithSubmit.js';
 import { Section } from '../components/Section.js';
 import { UserInfo } from '../components/UserInfo.js';
-import { authorizationToken, myId, validationConfig } from '../utils/constants.js';
+import { authorizationToken, validationConfig } from '../utils/constants.js';
 import { enableValidation, formValidators } from '../utils/validation.js';
 
 const api = new Api({
@@ -20,19 +20,20 @@ const api = new Api({
 enableValidation(validationConfig);
 const userInfo = new UserInfo('.profile__name', '.profile__subtitle', '.profile__avatar');
 
-const showImagePopup = new PopupWithImage('.popup_type_view-photo', '.popup__image', '.popup__caption');
-showImagePopup.setEventListeners();
+const imagePreviewPopup = new PopupWithImage('.popup_type_view-photo', '.popup__image', '.popup__caption');
+imagePreviewPopup.setEventListeners();
 
-const confirmDeletePopup = new PopupWithSubmit('.popup_type_delete-card-confirm', '.popup__button');
-confirmDeletePopup.setEventListeners();
+const cardDeletePopup = new PopupWithSubmit('.popup_type_delete-card-confirm', '.popup__button');
+cardDeletePopup.setEventListeners();
 
 const imagesSection = new Section(
     (photoCardData) => {
+        const myId = userInfo.getUserInfo().id;
         const canDelete = myId === photoCardData.owner._id;
         const likeCount = photoCardData.likes.length;
         const isLiked = photoCardData.likes.findIndex((element) => element._id === myId) !== -1;
         const photoCard = new Card(photoCardData, likeCount, isLiked, canDelete, '#template-photo-card', () => {
-            showImagePopup.open(photoCardData);
+            imagePreviewPopup.open(photoCardData);
         }, (isLiked) => {
             let result;
             if (isLiked) {
@@ -47,7 +48,7 @@ const imagesSection = new Section(
                 console.log(`Ошибка лайка карточки: ${err}`);
             });
         }, () => {
-            confirmDeletePopup.open(() => {
+            cardDeletePopup.open(() => {
                 api.deleteCard(photoCardData._id)
                     .then(() => photoCard.delete())
                     .catch(err => {
@@ -58,14 +59,14 @@ const imagesSection = new Section(
         return photoCard.render();
     }, '.elements');
 
-const editProfilePopup = new PopupWithForm('.popup_type_user', '.form', '.form__submit-button',
+const profileEditPopup = new PopupWithForm('.popup_type_user', '.form', '.form__submit-button',
     (formName, state) => {
         const validator = formValidators[formName];
         if (validator === null) {
             return;
         }
         if (state === 'open') {
-            editProfilePopup.setInputValues(userInfo.getUserInfo());
+            profileEditPopup.setInputValues(userInfo.getUserInfo());
             validator.setSubmitButtonDisabled(false);
         } else if (state === 'close') {
             validator.resetValidationState();
@@ -75,15 +76,16 @@ const editProfilePopup = new PopupWithForm('.popup_type_user', '.form', '.form__
         // запрос на сохранение обновленной информации о пользователе
         api.updateUserInfo(JSON.stringify(inputs))
             .then((res) => userInfo.setUserInfo(res))
+            .then(() => done(false))
             .catch(err => {
-                console.log(`Ошибка обновления информации о пользователе: ${err}`)
+                console.log(`Ошибка обновления информации о пользователе: ${err}`);
+                done(true);
             })
-            .finally(done);
     });
 
-editProfilePopup.setEventListeners();
+profileEditPopup.setEventListeners();
 
-const addNewCardPopup = new PopupWithForm('.popup_type_photo-card', '.form', '.form__submit-button',
+const newCardAddPopup = new PopupWithForm('.popup_type_photo-card', '.form', '.form__submit-button',
     (formName, state) => {
         const validator = formValidators[formName];
         if (validator === null) {
@@ -99,16 +101,17 @@ const addNewCardPopup = new PopupWithForm('.popup_type_photo-card', '.form', '.f
         api.addNewCard(JSON.stringify(inputs))
             .then((res) => {
                 imagesSection.prependItem(res);
+                done(false);
             })
             .catch(err => {
                 console.log(`Ошибка добавления новой карточки: ${err}`);
-            })
-            .finally(done);
+                done(true);
+            });
     });
-addNewCardPopup.setEventListeners();
+newCardAddPopup.setEventListeners();
 
 // попап с загрузкой фото профиля 
-const editNewProfilePhoto = new PopupWithForm('.popup_type_profile-photo', '.form', '.form__submit-button',
+const profileAvatarUpdatePopup = new PopupWithForm('.popup_type_profile-photo', '.form', '.form__submit-button',
     (formName, state) => {
         const validator = formValidators[formName];
         if (validator === null) {
@@ -124,43 +127,35 @@ const editNewProfilePhoto = new PopupWithForm('.popup_type_profile-photo', '.for
         api.updateAvatar(JSON.stringify(inputs))
             .then((res) => {
                 userInfo.setAvatar(res);
+                done(false);
             })
             .catch(err => {
                 console.log(`Ошибка обновления аватара: ${err}`);
-            })
-            .finally(done);
+                done(true);
+            });
     });
-editNewProfilePhoto.setEventListeners();
+profileAvatarUpdatePopup.setEventListeners();
 
 document.querySelector('.profile__edit-button').addEventListener('click', () => {
-    editProfilePopup.open();
+    profileEditPopup.open();
 });
 
 document.querySelector('.profile__add-button').addEventListener('click', () => {
-    addNewCardPopup.open();
+    newCardAddPopup.open();
 });
 
 document.querySelector('.profile__container').addEventListener('click', () => {
-    editNewProfilePhoto.open();
+    profileAvatarUpdatePopup.open();
 });
 
-// запрос для загрузки информации о пользователе
-api.getUserInfo()
-    .then((result) => {
-        userInfo.setUserInfo(result);
-        userInfo.setAvatar(result);
+Promise.all([
+    api.getUserInfo(),
+    api.getInitialCards()])
+    .then(([profileInfo, initialCards]) => {
+        userInfo.setUserInfo(profileInfo);
+        userInfo.setAvatar(profileInfo);
+        imagesSection.render(initialCards);
     })
-    .catch(err => {
-        console.log(`Ошибка загрузки информации о пользователе: ${err}`);
+    .catch((err) => {
+        console.log(`Ошибка загрузки начальных данных: ${err}`);
     });
-
-// запрос для загрузки карточек
-api.getInitialCards()
-    .then((result) => {
-        imagesSection.setItems(result);
-        imagesSection.render();
-    }).catch(err => {
-        console.log(`Ошибка загрузки списка картинок: ${err}`);
-    });
-
-

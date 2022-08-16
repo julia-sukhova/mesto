@@ -23,23 +23,27 @@ class Card {
         this._cardImageElement.setAttribute('src', this._link);
         this._cardImageElement.setAttribute('alt', this._name);
         this._cardTitleElement.textContent = this._name;
+        if (this._canDelete) {
+            this._cardDeleteButton.classList.remove('element__button-delete_inactive');
+        } else {
+            this._cardDeleteButton.classList.add('element__button-delete_inactive');
+        }
+        this._updateLikes();
+    }
+
+    _updateLikes() {
         this._cardLikeCountElement.textContent = this._likeCount;
         if (this._isLiked) {
             this._cardLikeButton.classList.add('element__button_active');
         } else {
             this._cardLikeButton.classList.remove('element__button_active');
         }
-        if (this._canDelete) {
-            this._cardDeleteButton.classList.remove('element__button-delete_inactive');
-        } else {
-            this._cardDeleteButton.classList.add('element__button-delete_inactive');
-        }
     }
 
     _onLikeToggleHandler() {
         this._isLiked = !this._isLiked;
         this._handleLikeClick(this._isLiked);
-        this._setOrUpdateCardData();
+        this._updateLikes();
     }
 
     _setEventListeners() {
@@ -58,7 +62,7 @@ class Card {
 
     setLikeCount(likeCount) {
         this._likeCount = likeCount;
-        this._setOrUpdateCardData();
+        this._updateLikes();
     }
 
     delete() {

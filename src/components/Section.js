@@ -1,6 +1,5 @@
 class Section {
     constructor(renderer, containerSelector) {
-        this._items = [];
         this._renderer = renderer;
         this._container = document.querySelector(containerSelector);
     }
@@ -9,15 +8,11 @@ class Section {
         this._container.innerHTML = '';
     }
 
-    render() {
+    render(items) {
         this.clear();
-        this._items.forEach(item => {
+        items.forEach(item => {
             this.addItem(item);
         });
-    }
-
-    setItems(items) {
-        this._items = items;
     }
 
     addItem(item) {
