@@ -72,14 +72,18 @@ const profileEditPopup = new PopupWithForm('.popup_type_user', '.form', '.form__
             validator.resetValidationState();
         }
     },
-    (inputs, done) => {
+    (inputs) => {
         // запрос на сохранение обновленной информации о пользователе
         api.updateUserInfo(JSON.stringify(inputs))
-            .then((res) => userInfo.setUserInfo(res))
-            .then(() => done(false))
+            .then((res) => {
+                userInfo.setUserInfo(res);
+                profileEditPopup.close();
+            })
             .catch(err => {
                 console.log(`Ошибка обновления информации о пользователе: ${err}`);
-                done(true);
+            })
+            .finally(() => {
+                profileEditPopup.setOriginText();
             })
     });
 
@@ -97,15 +101,17 @@ const newCardAddPopup = new PopupWithForm('.popup_type_photo-card', '.form', '.f
             validator.resetValidationState();
         }
     },
-    (inputs, done) => {
+    (inputs) => {
         api.addNewCard(JSON.stringify(inputs))
             .then((res) => {
                 imagesSection.prependItem(res);
-                done(false);
+                newCardAddPopup.close();
             })
             .catch(err => {
                 console.log(`Ошибка добавления новой карточки: ${err}`);
-                done(true);
+            })
+            .finally(() => {
+                newCardAddPopup.setOriginText();
             });
     });
 newCardAddPopup.setEventListeners();
@@ -123,15 +129,17 @@ const profileAvatarUpdatePopup = new PopupWithForm('.popup_type_profile-photo', 
             validator.resetValidationState();
         }
     },
-    (inputs, done) => {
+    (inputs) => {
         api.updateAvatar(JSON.stringify(inputs))
             .then((res) => {
                 userInfo.setAvatar(res);
-                done(false);
+                profileAvatarUpdatePopup.close();
             })
             .catch(err => {
                 console.log(`Ошибка обновления аватара: ${err}`);
-                done(true);
+            })
+            .finally(() => {
+                profileAvatarUpdatePopup.setOriginText();
             });
     });
 profileAvatarUpdatePopup.setEventListeners();
